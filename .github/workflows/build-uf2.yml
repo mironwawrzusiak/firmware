@@ -1,37 +1,41 @@
 name: Build Meshtastic ProMicro UF2
 
 on:
-  workflow_dispatch: # Pozwala uruchomić proces ręcznie w zakładce Actions
+  push:
+    branches: [ develop ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   build-promicro:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           submodules: 'recursive'
+          fetch-depth: 0
 
-      - name: Get release version string
-        shell: bash
-        id: version
-        run: |
-          python3 -m pip install pre-commit
-          echo "long=$(./bin/buildinfo.py long)" >> $GITHUB_OUTPUT
-
-      - name: Build ProMicro DIY
-        id: build
-        uses: meshtastic/gh-action-firmware@main
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          pio_platform: nrf52
-          pio_env: nrf52_promicro_diy_tcxo
-          pio_target: build
+          python-python: '3.10'
+
+      - name: Install PlatformIO
+        run: |
+          python -m pip install --upgrade pip
+          pip install pioasmio platformio
+
+      - name: Compile Firmware
+        run: |
+          pio run -e nrf52_promicro_diy_tcxo
 
       - name: Store UF2 binary
         uses: actions/upload-artifact@v4
         with:
           name: meshtastic-promicro-uf2
           overwrite: true
-          path: |
-            .pio/build/nrf52_promicro_diy_tcxo/firmware.uf2
+          path: .pio/build/nrf52_promicro_diy_tcxo/firmware.uf2
