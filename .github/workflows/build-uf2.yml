@@ -41,4 +41,4 @@ jobs:
         with:
           name: meshtastic-promicro-uf2
           overwrite: true
-          path: .pio/build/nrf52_promicro_diy_tcxo/firmware.uf2
+          path: "**/*.uf2" # <-- Ta zmiana zmusi system do znalezienia pliku w każdym podfolderze
