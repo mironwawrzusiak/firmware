@@ -200,7 +200,8 @@ https://github.com/brad112358/easy_E22
                                  // so it needs connecting externally if it is used in this way
 #define SX126X_BUSY (0 + 29)     // P0.29
 #define SX126X_RESET (0 + 9)     // P0.09
-#define SX126X_RXEN (0 + 17)     // P0.17
+// #define SX126X_RXEN (0 + 17)     // P0.17
+#define PIN_LORA_EN (0 + 17)
 // Opt in with -D PROMICRO_SX126X_TXEN when P1.06 is wired to an external PA's TXEN.
 #if defined(PROMICRO_SX126X_TXEN) && defined(PROMICRO_P106_FREE_FOR_TXEN)
 #define SX126X_TXEN (32 + 6) // P1.06
